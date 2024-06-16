@@ -2,6 +2,7 @@
 .idea
 *.class
 *.iml
+submission archives/*
 
 ### VS Code ###
 .vscode/
