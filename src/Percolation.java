@@ -6,11 +6,10 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
 
     public int N;
-    public boolean[][] blocked;
     public boolean[][] opened;
-    public boolean[][] full;
-
-    public int[][] parent;
+    public WeightedQuickUnionUF uf;
+    public int virtual_top;
+    public int virtual_bottom;
     public int open_sites = 0;
 
     // creates n-by-n grid, with all sites initially blocked
@@ -21,20 +20,18 @@ public class Percolation {
             throw new IllegalArgumentException("N must be greater than 0");
         }
         N = n;
-
-        blocked = new boolean[N][N];
         opened = new boolean[N][N];
-        full = new boolean[N][N];
-        parent = new int[N][N];
+        uf = new WeightedQuickUnionUF(N*N+2);
+        virtual_top = N * N;
+        virtual_bottom = N * N + 1;
 
-        for(int i = 1; i <= N; ++i)
-        {
-            for(int j = 1; j <= N; ++j)
-            {
-                blocked[i-1][j-1] = true;
-                parent[i-1][i-1] = ;
-            }
-        }
+//        for(int i = 1; i <= N; ++i)
+//        {
+//            for(int j = 1; j <= N; ++j)
+//            {
+//                blocked[i-1][j-1] = true;
+//            }
+//        }
 
     }
 
@@ -45,26 +42,44 @@ public class Percolation {
         {
             throw new IllegalArgumentException("N must be greater than 0 and lower than: " + N);
         }
+
+        int current = (row - 1) * N + (col - 1);
+
+        if(row == 1)
+        {
+            uf.union(current, virtual_top);
+        } else if (row == N) {
+            uf.union(current, virtual_bottom);
+        }
+
         if(!opened[row-1][col-1])
         {
             open_sites++;
             opened[row-1][col-1] = true;
 
-            if(isOpen(row-1, col))
+            //[1; N]
+            if(row > 1 && isOpen(row - 1, col))
             {
-                union(row-1, col);
+                //[0, N-1]
+                uf.union(current, (row - 2) * N + (col - 1));
             }
-            if(isOpen(row, col-1))
+            //[1; N]
+            if(row < N && isOpen(row + 1, col))
             {
-                union(row, col-1);
+                //[0, N-1]
+                uf.union(current, row * N + (col - 1));
             }
-            if(isOpen(row-1,col-2))
+            //[1; N]
+            if(col > 1 && isOpen(row, col - 1))
             {
-                union(row-1, col-2);
+                //[0, N-1]
+                uf.union(current, (row - 1) * N + (col - 2));
             }
-            if(isOpen(row-2,col-1))
+            //[1; N]
+            if(col < N && isOpen(row, col + 1))
             {
-                union(row-2, col-1);
+                //[0, N-1]
+                uf.union(current, (row - 1) * N + col);
             }
         }
     }
@@ -100,25 +115,10 @@ public class Percolation {
         return false;
     }
 
-    public void union(int p, int q)
-    {
-
-    }
-
-    public void find()
-    {
-
-    }
-
-    public void root(int p, int q)
-    {
-
-    }
-
     public static void main(String[] args)
     {
         int N = StdIn.readInt();
-        WeightedQuickUnionUF
+        WeightedQuickUnionUF w1 = new WeightedQuickUnionUF(4);
         int opened_sites;
         try {
             Percolation p = new Percolation(N);
