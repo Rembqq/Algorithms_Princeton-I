@@ -1,6 +1,3 @@
-import edu.princeton.cs.algs4.StdIn;
-import edu.princeton.cs.algs4.StdRandom;
-import edu.princeton.cs.algs4.StdStats;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
@@ -8,6 +5,7 @@ public class Percolation {
     public int N;
     public boolean[][] opened;
     public WeightedQuickUnionUF uf;
+    public WeightedQuickUnionUF uf_top;
     public int virtual_top;
     public int virtual_bottom;
     public int open_sites = 0;
@@ -22,16 +20,10 @@ public class Percolation {
         N = n;
         opened = new boolean[N][N];
         uf = new WeightedQuickUnionUF(N*N+2);
+        // without bottom virtual site
+        uf_top = new WeightedQuickUnionUF(N*N+1);
         virtual_top = N * N;
         virtual_bottom = N * N + 1;
-
-//        for(int i = 1; i <= N; ++i)
-//        {
-//            for(int j = 1; j <= N; ++j)
-//            {
-//                blocked[i-1][j-1] = true;
-//            }
-//        }
 
     }
 
@@ -45,41 +37,46 @@ public class Percolation {
 
         int current = (row - 1) * N + (col - 1);
 
-        if(row == 1)
-        {
-            uf.union(current, virtual_top);
-        } else if (row == N) {
-            uf.union(current, virtual_bottom);
-        }
-
         if(!opened[row-1][col-1])
         {
             open_sites++;
             opened[row-1][col-1] = true;
+
+            if(row == 1)
+            {
+                uf.union(current, virtual_top);
+                uf_top.union(current, virtual_top);
+            } else if (row == N) {
+                uf.union(current, virtual_bottom);
+            }
 
             //[1; N]
             if(row > 1 && isOpen(row - 1, col))
             {
                 //[0, N-1]
                 uf.union(current, (row - 2) * N + (col - 1));
+                uf_top.union(current, (row - 2) * N + (col - 1));
             }
             //[1; N]
             if(row < N && isOpen(row + 1, col))
             {
                 //[0, N-1]
                 uf.union(current, row * N + (col - 1));
+                uf_top.union(current, row * N + (col - 1));
             }
             //[1; N]
             if(col > 1 && isOpen(row, col - 1))
             {
                 //[0, N-1]
                 uf.union(current, (row - 1) * N + (col - 2));
+                uf_top.union(current, (row - 1) * N + (col - 2));
             }
             //[1; N]
             if(col < N && isOpen(row, col + 1))
             {
                 //[0, N-1]
                 uf.union(current, (row - 1) * N + col);
+                uf_top.union(current, (row - 1) * N + col);
             }
         }
     }
@@ -101,7 +98,7 @@ public class Percolation {
         {
             throw new IllegalArgumentException("N must be greater than 0 and lower than: " + N);
         }
-        return full[row-1][col-1];
+        return uf_top.find(virtual_top) == uf_top.find((row - 1) * N + (col-1));
     }
 
     // returns the number of open sites
@@ -112,26 +109,30 @@ public class Percolation {
     // does the system percolate?
     public boolean percolates()
     {
-        return false;
+        return uf.find(virtual_top) == uf.find(virtual_bottom);
     }
 
     public static void main(String[] args)
     {
-        int N = StdIn.readInt();
-        WeightedQuickUnionUF w1 = new WeightedQuickUnionUF(4);
-        int opened_sites;
-        try {
-            Percolation p = new Percolation(N);
-            while(!p.percolates())
-            {
-                p.open(3,6);
-            }
-            opened_sites = p.numberOfOpenSites();
-        }
-        catch (IllegalArgumentException e)
-        {
-            System.err.println("Error: " + e.getMessage());
-        }
+//        int N = 20;
+//        int sample_mean  = 0;
+//
+//        int opened_sites;
+//        try {
+//            Percolation p = new Percolation(N);
+//            while(!p.percolates())
+//            {
+//                p.open(StdRandom.uniformInt(1, N + 1), StdRandom.uniformInt(1, N + 1));
+//            }
+//            opened_sites = p.numberOfOpenSites();
+//            System.out.println(opened_sites);
+//            System.out.println((double) opened_sites / (N * N));
+//        }
+//        catch (IllegalArgumentException e)
+//        {
+//            System.err.println("Error: " + e.getMessage());
+//            e.printStackTrace();
+//        }
     }
 }
 
