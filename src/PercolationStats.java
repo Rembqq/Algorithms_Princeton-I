@@ -3,10 +3,10 @@ import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
 
-    public double mean;
-    public double stddev;
-    public double confidenceLow;
-    public double confidenceHigh;
+    private final double mean;
+    private final double stddev;
+    private final double confidenceLow;
+    private final double confidenceHigh;
     public PercolationStats(int n, int trials)
     {
         if(n <= 0 || trials <= 0)

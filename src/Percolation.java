@@ -2,13 +2,13 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 
-    public int N;
-    public boolean[][] opened;
-    public WeightedQuickUnionUF uf;
-    public WeightedQuickUnionUF uf_top;
-    public int virtual_top;
-    public int virtual_bottom;
-    public int open_sites = 0;
+    private final int N;
+    private final boolean[][] opened;
+    private final WeightedQuickUnionUF uf;
+    private final WeightedQuickUnionUF uf_top;
+    private final int virtual_top;
+    private final int virtual_bottom;
+    private int open_sites = 0;
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) throws IllegalArgumentException
