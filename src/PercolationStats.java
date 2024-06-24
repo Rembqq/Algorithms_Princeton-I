@@ -7,30 +7,35 @@ public class PercolationStats {
     private final double stddev;
     private final double confidenceLow;
     private final double confidenceHigh;
+
     public PercolationStats(int n, int trials)
     {
-        if(n <= 0 || trials <= 0)
+        if (n <= 0 || trials <= 0)
         {
             throw new IllegalArgumentException("N and T have to be > 0");
         }
 
-        Percolation[] p1 = new Percolation[trials];
-        double[] open_sites_thresholds = new double[trials];
+        Percolation p;
+        double[] openSitesThresholds = new double[trials];
 
 
-        for(int i = 0; i < trials; ++i)
+        for (int i = 0; i < trials; ++i)
         {
-            p1[i] = new Percolation(n);
-            while(!p1[i].percolates())
+            p = new Percolation(n);
+            while (!p.percolates())
             {
-                p1[i].open(StdRandom.uniformInt(1, n + 1), StdRandom.uniformInt(1, n + 1));
+                p.open(StdRandom.uniformInt(1, n + 1), StdRandom.uniformInt(1, n + 1));
             }
-            open_sites_thresholds[i] = (double) p1[i].numberOfOpenSites() / (n * n);
+            openSitesThresholds[i] = (double) p.numberOfOpenSites() / (n * n);
         }
-        mean = StdStats.mean(open_sites_thresholds);
-        stddev = StdStats.stddev(open_sites_thresholds);
-        confidenceLow = mean - ((1.96 * stddev) / Math.sqrt(trials));
-        confidenceHigh = mean + ((1.96 * stddev) / Math.sqrt(trials));
+        mean = StdStats.mean(openSitesThresholds);
+        stddev = StdStats.stddev(openSitesThresholds);
+
+        double confidence95 = 1.96;
+        double range = (confidence95 * stddev) / Math.sqrt(trials);
+
+        confidenceLow = mean - range;
+        confidenceHigh = mean + range;
     }
 
     // sample mean of percolation threshold
@@ -67,7 +72,6 @@ public class PercolationStats {
         } catch (IllegalArgumentException e)
         {
             System.err.println("Error: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 }
