@@ -50,7 +50,8 @@ public class Percolation {
             {
                 uf.union(current, virtualTop);
                 ufTop.union(current, virtualTop);
-            } else if (row == n) {
+            }
+            if (row == n) {
                 uf.union(current, virtualBottom);
             }
 
@@ -110,27 +111,6 @@ public class Percolation {
         return uf.find(virtualTop) == uf.find(virtualBottom);
     }
 
-    public static void main(String[] args)
-    {
-//        int n = 20;
-//        int sample_mean  = 0;
-//
-//        int opened_sites;
-//        try {
-//            Percolation p = new Percolation(n);
-//            while(!p.percolates())
-//            {
-//                p.open(StdRandom.uniformInt(1, n + 1), StdRandom.uniformInt(1, n + 1));
-//            }
-//            opened_sites = p.numberOfOpenSites();
-//            System.out.println(opened_sites);
-//            System.out.println((double) opened_sites / (n * n));
-//        }
-//        catch (IllegalArgumentException e)
-//        {
-//            System.err.println("Error: " + e.getMessage());
-//            e.printStackTrace();
-//        }
-    }
+    public static void main(String[] args) {}
 }
 

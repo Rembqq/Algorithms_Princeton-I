@@ -66,7 +66,7 @@ public class PercolationStats {
         try {
             PercolationStats PS = new PercolationStats(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
             System.out.println("mean                    = " + PS.mean());
-            System.out.println("Standard deviation      = " + PS.stddev());
+            System.out.println("stddev                  = " + PS.stddev());
             System.out.println("95% confidence interval = [" + PS.confidenceLo() + ", " + PS.confidenceHi() + "]");
 
         } catch (IllegalArgumentException e)
