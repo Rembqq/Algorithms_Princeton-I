@@ -8,16 +8,15 @@ public class EggDropV4 {
 
         while (current <= n && !isBroken(current)) {
             previous = current;
-            interval += c;
             current += interval;
         }
 
-        for (int i = previous + 1; i < current; i++) {
+        for (int i = previous + 1; i < current && i <= n; i++) {
             if (isBroken(i)) {
                 return i - 1;
             }
         }
-        return current - 1;
+        return current <= n ? current - 1 : n;
     }
 
     private static boolean isBroken(int floor) {
@@ -31,4 +30,5 @@ public class EggDropV4 {
         System.out.println("Максимальный безопасный этаж: " + findT(n, c));
     }
 }
+
 
