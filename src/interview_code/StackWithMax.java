@@ -6,7 +6,7 @@ public class StackWithMax {
     private Stack<Double> mainStack;
     private Stack<Double> maxStack;
 
-    public MaxStack() {
+    public StackWithMax() {
         mainStack = new Stack<>();
         maxStack = new Stack<>();
     }
