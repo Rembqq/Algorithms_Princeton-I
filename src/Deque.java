@@ -1,7 +1,8 @@
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public class Deque<Item> /*implements Iterable<Item>*/ {
+public class Deque<Item> implements Iterable<Item> {
 
     private Node first;
     private Node last;
@@ -51,12 +52,12 @@ public class Deque<Item> /*implements Iterable<Item>*/ {
     // add the item to the front
     public void addFirst(Item item) {
         nulArgCheck(item);
-        
+
         Node oldFirst = first;
         first = new Node();
         first.next = oldFirst;
         first.item = item;
-        
+
         if(last == null) {
             last = first;
         }
@@ -66,14 +67,16 @@ public class Deque<Item> /*implements Iterable<Item>*/ {
     // add the item to the back
     public void addLast(Item item) {
         nulArgCheck(item);
-        
+
         Node oldLast = last;
         last = new Node();
         oldLast.next = last;
         last.item = item;
-        
+
         if(first == null) {
             first = last;
+        } else {
+            oldLast.next = last;
         }
         size++;
     }
@@ -84,6 +87,9 @@ public class Deque<Item> /*implements Iterable<Item>*/ {
         Item data = first.item;
         first = first.next;
         size--;
+        if(isEmpty()) {
+            last = null;
+        }
         return data;
     }
 
@@ -93,7 +99,8 @@ public class Deque<Item> /*implements Iterable<Item>*/ {
         // linear search
         if(size == 1) {
             Item data1 = first.item;
-            first = null;
+            first = last = null;
+            size--;
             return data1;
         }
         Node penultimate = first;
@@ -101,15 +108,42 @@ public class Deque<Item> /*implements Iterable<Item>*/ {
             penultimate = penultimate.next;
         }
         Item data = last.item;
-        penultimate.next = null;
+        last = penultimate;
+        last.next = null;
         size--;
         return data;
     }
 
     // return an iterator over items in order from front to back
-    // public Iterator<Item> iterator() {
+    public Iterator<Item> iterator() {
+        return new DequeIterator(first);
+    }
 
-    // }
+
+    private class DequeIterator implements Iterator<Item> {
+        private Node current;
+
+        public DequeIterator(Node first) {
+            current = first;
+        }
+
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        public Item next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            Item item = current.item;
+            current = current.next;
+            return item;
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+    }
 
     // unit testing (required)
     public static void main(String[] args) {
@@ -122,18 +156,9 @@ public class Deque<Item> /*implements Iterable<Item>*/ {
         System.out.println(deque.size());
         System.out.println(deque.removeLast());
         System.out.println(deque.size());
-        System.out.println(deque.removeLast());
+        for(String s : deque) {
+            System.out.println(s);
+        }
+        //System.out.println(deque.removeLast());
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
