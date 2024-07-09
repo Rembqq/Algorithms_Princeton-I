@@ -4,12 +4,13 @@ import java.util.NoSuchElementException;
 
 public class Deque<Item> implements Iterable<Item> {
 
-    private Node first;
-    private Node last;
+    private Node<Item> first;
+    private Node<Item> last;
     private int size;
-    private class Node {
+    private static class Node<Item> {
         Item item;
-        Node next;
+        Node<Item> next;
+        Node<Item> prev;
     }
 
     // construct an empty deque
@@ -21,20 +22,12 @@ public class Deque<Item> implements Iterable<Item> {
 
     // is the deque empty?
     public boolean isEmpty() {
-        return first == null;
+        return size == 0;
     }
 
 
     // return the number of items on the deque
     public int size() {
-//        int size = 1;
-//        if(!isEmpty())
-//        {
-//            for(Node i = first; i != last; i = i.next)
-//            {
-//                size++;
-//            }
-//        }
         return size;
     }
 
@@ -53,14 +46,19 @@ public class Deque<Item> implements Iterable<Item> {
     public void addFirst(Item item) {
         nulArgCheck(item);
 
-        Node oldFirst = first;
-        first = new Node();
+        Node<Item> oldFirst = first;
+        first = new Node<>();
         first.next = oldFirst;
         first.item = item;
+        first.prev = null;
 
-        if(last == null) {
+        if(isEmpty()) {
             last = first;
+        } else {
+            // first.next.prev = first
+            oldFirst.prev = first;
         }
+
         size++;
     }
 
@@ -68,27 +66,32 @@ public class Deque<Item> implements Iterable<Item> {
     public void addLast(Item item) {
         nulArgCheck(item);
 
-        Node oldLast = last;
-        last = new Node();
-        oldLast.next = last;
+        Node<Item> oldLast = last;
+        last = new Node<>();
         last.item = item;
+        last.next = null;
+        last.prev = oldLast;
 
-        if(first == null) {
+        if(isEmpty()) {
             first = last;
         } else {
             oldLast.next = last;
         }
+
         size++;
     }
 
     // remove and return the item from the front
     public Item removeFirst() {
         emptyDequeCheck();
+
         Item data = first.item;
         first = first.next;
         size--;
         if(isEmpty()) {
             last = null;
+        } else {
+            first.prev = null;
         }
         return data;
     }
@@ -97,20 +100,31 @@ public class Deque<Item> implements Iterable<Item> {
     public Item removeLast() {
         emptyDequeCheck();
         // linear search
-        if(size == 1) {
-            Item data1 = first.item;
-            first = last = null;
-            size--;
-            return data1;
-        }
-        Node penultimate = first;
-        while(penultimate.next != last) {
-            penultimate = penultimate.next;
-        }
+//        if(size == 1) {
+//            Item data1 = first.item;
+//            first = last = null;
+//            size--;
+//            return data1;
+//        }
+//        Node penultimate = first;
+//        while(penultimate.next != last) {
+//            penultimate = penultimate.next;
+//        }
+//        Item data = last.item;
+//        last = penultimate;
+//        last.next = null;
+//        size--;
+//        return data;
         Item data = last.item;
-        last = penultimate;
-        last.next = null;
+        last = last.prev;
         size--;
+
+        if(isEmpty()) {
+            first = null;
+        } else {
+            last.next = null;
+        }
+
         return data;
     }
 
@@ -121,9 +135,9 @@ public class Deque<Item> implements Iterable<Item> {
 
 
     private class DequeIterator implements Iterator<Item> {
-        private Node current;
+        private Node<Item> current;
 
-        public DequeIterator(Node first) {
+        public DequeIterator(Node<Item> first) {
             current = first;
         }
 
@@ -147,7 +161,7 @@ public class Deque<Item> implements Iterable<Item> {
 
     // unit testing (required)
     public static void main(String[] args) {
-        Deque<String> deque = new Deque<String>();
+        Deque<String> deque = new Deque<>();
         String[] data = {"data1", "data2", "data3", "data4", "data5", "data6"};
         deque.addFirst(data[0]);
         deque.addLast(data[2]);
