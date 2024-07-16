@@ -158,7 +158,6 @@ public class Deque<Item> implements Iterable<Item> {
             throw new UnsupportedOperationException();
         }
     }
-
     // unit testing (required)
     public static void main(String[] args) {
         Deque<String> deque = new Deque<>();
