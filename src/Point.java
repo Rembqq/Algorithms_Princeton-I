@@ -22,17 +22,15 @@ public class Point implements Comparable<Point> {
     }
 
     public int compareTo(Point that) {
-        if(this.y < that.y)
+        if (this.y == that.y)
         {
-            return -1;
-        } else if (this.y == that.y) {
-            return 0;
+            return this.x - that.x;
         } else {
-            return 1;
+            return this.y - that.y;
         }
     }
     public double slopeTo(Point that) {
-        if(this.y == that.y && this.x == that.x) {
+        if(this.compareTo(that) == 0) {
             return Double.NEGATIVE_INFINITY;
         } else if(this.x == that.x) {
             return Double.POSITIVE_INFINITY;

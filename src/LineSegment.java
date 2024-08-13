@@ -17,4 +17,9 @@ public class LineSegment {
     public String toString() {
         return p + " -> " + q;
     }
+
+    public int hashCode() {
+        throw new UnsupportedOperationException();
+    }
+
 }
