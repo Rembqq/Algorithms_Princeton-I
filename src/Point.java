@@ -4,13 +4,13 @@ import java.util.Comparator;
 
 public class Point implements Comparable<Point> {
 
-    private final short x;
-    private final short y;
-    public Point(short x, short y) {
+    private final int x;
+    private final int y;
+    public Point(int x, int y) {
         this.x = x;
         this.y = y;
     }
-    public void draw(Point that) {
+    public void draw() {
         StdDraw.point(x, y);
     }
 

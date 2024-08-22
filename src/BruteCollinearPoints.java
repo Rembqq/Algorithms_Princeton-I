@@ -44,7 +44,8 @@ public class BruteCollinearPoints {
                         Point q = pointsCopy[j];
                         Point r = pointsCopy[k];
                         Point s = pointsCopy[l];
-                        if (p.slopeTo(q) == p.slopeTo(r) && p.slopeTo(r) == p.slopeTo(s)) {
+                        if (Double.compare(p.slopeTo(q), p.slopeTo(r)) == 0 &&
+                                Double.compare(p.slopeTo(r), p.slopeTo(s)) == 0) {
                             LineSegment segment = new LineSegment(p, s);
                             lineSegments.add(segment);
                         }
@@ -73,8 +74,8 @@ public class BruteCollinearPoints {
         int n = in.readInt();
         Point[] points = new Point[n];
         for (int i = 0; i < n; i++) {
-            short x = in.readShort();
-            short y = in.readShort();
+            int x = in.readInt();
+            int y = in.readInt();
             points[i] = new Point(x, y);
         }
 
