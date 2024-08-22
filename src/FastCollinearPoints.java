@@ -21,6 +21,8 @@ public class FastCollinearPoints {
             pointsCopy[i] = points[i];
         }
 
+        // creates dynamic array for adding elems
+        // which then are copied with .toArray method
         Arrays.sort(pointsCopy);
         List<LineSegment> lineSegments = new LinkedList<>();
 
@@ -34,6 +36,9 @@ public class FastCollinearPoints {
             } else {
                 previousPoint = p;
             }
+
+            // creates array sorted by its slope
+            // and sorts it for fast analysis of elems
             Point[] slopeOrderedPoints = pointsCopy.clone();
             Arrays.sort(slopeOrderedPoints, p.slopeOrder());
 
@@ -49,7 +54,10 @@ public class FastCollinearPoints {
                 double currentSlope = p.slopeTo(q);
                 if(Double.compare(currentSlope, lastSlope) != 0) {
                     // at least four points (3j and 1i)
-                    if(j - slopeStartIndex >= 2) {
+                    if(j - slopeStartIndex >= 3) {
+                        // this says true if first adjacent elem from our p(origin)
+                        // is located in first or second quarter of trigonometric circle
+                        // considering p is in centre(basically if p is below sSIndex)
                         if(p.compareTo(slopeOrderedPoints[slopeStartIndex]) <= 0) {
                             // j - 1 because (our current elem != previousElem) ==> we have
                             // to take last suitable
@@ -59,7 +67,7 @@ public class FastCollinearPoints {
                     }
                     slopeStartIndex = j;
                 } else if(lastPoint) {
-                    if(j - slopeStartIndex >= 3) {
+                    if(j - slopeStartIndex >= 2) {
                         if(p.compareTo(slopeOrderedPoints[slopeStartIndex]) <= 0) {
                             LineSegment segment = new LineSegment(p, q);
                             lineSegments.add(segment);
