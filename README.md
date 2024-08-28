@@ -7,7 +7,7 @@ Linux/Mac: `javac -cp "./libs/algs4.jar:./src" ./src/RandomWord.java`
 ### Launch program
 Windows: `java -cp ".\libs\algs4.jar;.\src" RandomWord`
 </br>
-Linux/Mac: `java -cp ".\libs\algs4.jar;.\src" RandomWord`
+Linux/Mac: `java -cp ".\libs\algs4.jar;.\src" RandomWord` { + args}
 </br>
 _or_
 </br>
