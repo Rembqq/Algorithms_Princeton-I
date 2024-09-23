@@ -1,6 +1,8 @@
 import edu.princeton.cs.algs4.StdRandom;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Board {
 
@@ -101,7 +103,25 @@ public class Board {
     // all neighboring boards
     public Iterable<Board> neighbors() {
         // TODO
-        return null;
+        List<Board> neighbors = new ArrayList<>();
+        int n = dimension();
+
+        int blankTileRow;
+        int blankTileCol;
+
+        for(int i = 0; i < n; ++i) {
+            for(int j = 0; j < n; ++j) {
+                if(tiles[i][j] == 0) {
+                    blankTileRow = i;
+                    blankTileCol = j;
+                    break;
+                }
+            }
+        }
+
+        neighbors.add(new Board())
+
+        return neighbors;
     }
 
     // a board that is obtained by exchanging any pair of tiles
