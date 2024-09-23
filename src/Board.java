@@ -102,12 +102,12 @@ public class Board {
 
     // all neighboring boards
     public Iterable<Board> neighbors() {
-        // TODO
+
         List<Board> neighbors = new ArrayList<>();
         int n = dimension();
 
-        int blankTileRow;
-        int blankTileCol;
+        int blankTileRow = -1;
+        int blankTileCol = -1;
 
         for(int i = 0; i < n; ++i) {
             for(int j = 0; j < n; ++j) {
@@ -119,9 +119,42 @@ public class Board {
             }
         }
 
-        neighbors.add(new Board())
+        if(blankTileRow > 0) {
+            int[][] tmpTiles = copyMatrix();
+            swap(tmpTiles, blankTileRow, blankTileCol, blankTileRow - 1, blankTileCol);
+            neighbors.add(new Board(tmpTiles));
+        }
+        if(blankTileRow < n - 1) {
+            int[][] tmpTiles = copyMatrix();
+            swap(tmpTiles, blankTileRow, blankTileCol, blankTileRow + 1, blankTileCol);
+            neighbors.add(new Board(tmpTiles));
+        }
+        if(blankTileCol > 0) {
+            int[][] tmpTiles = copyMatrix();
+            swap(tmpTiles, blankTileRow, blankTileCol, blankTileRow, blankTileCol - 1);
+            neighbors.add(new Board(tmpTiles));
+        }
+        if(blankTileCol < n - 1) {
+            int[][] tmpTiles = copyMatrix();
+            swap(tmpTiles, blankTileRow, blankTileCol, blankTileRow, blankTileCol + 1);
+            neighbors.add(new Board(tmpTiles));
+        }
 
         return neighbors;
+    }
+
+    private void swap(int[][] tmpTiles, int row1, int col1, int row2, int col2) {
+        int tmp = tmpTiles[row1][col1];
+        tmpTiles[row1][col1] = tmpTiles[row2][col2];
+        tmpTiles[row2][col2] = tmp;
+    }
+
+    private int[][] copyMatrix() {
+        int[][] tmpTiles = new int[tiles.length][];
+        for(int i = 0; i < tmpTiles.length; ++i) {
+            tmpTiles[i] = Arrays.copyOf(tiles[i], tiles.length);
+        }
+        return tmpTiles;
     }
 
     // a board that is obtained by exchanging any pair of tiles
