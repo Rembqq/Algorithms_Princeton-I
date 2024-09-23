@@ -1,5 +1,7 @@
 import edu.princeton.cs.algs4.StdRandom;
 
+import java.util.Arrays;
+
 public class Board {
 
     int[][] tiles;
@@ -79,8 +81,21 @@ public class Board {
 
     // does this board equal y?
     public boolean equals(Object y) {
-        // TODO
-        return false;
+
+        if(this == y) return true;
+        if(!(y instanceof Board other)) return false;
+
+//        if(this.tiles.length == ((Board)y).tiles.length) {
+//            for(int i = 0; i < tiles.length; ++i) {
+//                for(int j = 0; j < tiles.length; ++j) {
+//                    if(tiles[i][j] != ((Board)y).tiles[i][j]) {
+//                        return false;
+//                    }
+//                }
+//            }
+//        }
+
+        return Arrays.deepEquals(this.tiles, other.tiles);
     }
 
     // all neighboring boards
@@ -100,6 +115,7 @@ public class Board {
         int[][] tiles = new int[3][3];
         for(int i = 0; i < tiles.length; ++i) {
             for(int j = 0; j < tiles.length; ++j) {
+                // not (i * tiles.length + j + 1) as we need zero as blank elem
                 tiles[i][j] = i * tiles.length + j;
             }
 
